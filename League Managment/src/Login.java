@@ -7,9 +7,9 @@ public class Login {
 		
 	}
 	
+	// This main is used for running test on login functions and running whole project.
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		new Login();
 	}
 
 }

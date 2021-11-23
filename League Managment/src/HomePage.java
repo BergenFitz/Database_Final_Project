@@ -1,9 +1,13 @@
 
 public class HomePage {
 
+	public HomePage(String Username) {
+		
+	}
+	
+	// This method used to test homepage
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		new HomePage("TestUser");
 	}
 
 }

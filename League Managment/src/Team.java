@@ -1,9 +1,12 @@
 
 public class Team {
 
+	public Team (int Team_ID) {
+		
+	}
+	// This function is used to test the team class
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		new Team(0);
 	}
 
 }

@@ -1,8 +1,10 @@
 
 public class League {
 
+	public League(int League_ID) {
+		
+	}
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		new League(0);
 	}
 }
