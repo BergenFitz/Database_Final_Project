@@ -34,8 +34,8 @@ public class MyLeague {
 		frame.setJMenuBar(bar);
 		
 		// Title 
-		title = new JLabel("My Leagues");
-		title.setBounds(200,20,400,50);
+		title = new JLabel("Your Leagues");
+		title.setBounds(150,20,400,50);
 		title.setFont(new Font("Courier", Font.BOLD,40));
 		panel.add(title);
 		

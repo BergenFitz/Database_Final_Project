@@ -21,6 +21,10 @@ public class Team {
 	private static JMenuBar bar;
 	private static JList<String> userTeamList;
 	private static JLabel title;
+	private static JLabel winsTitle;
+	private static JLabel losesTitle;
+	private static JLabel winsDis;
+	private static JLabel losesDis;
 	private static JLabel addTitle;
 	private static JLabel teamName;
 	private static JLabel invalidTxt;
@@ -62,11 +66,39 @@ public class Team {
 		teamName.setVisible(false);
 		panel.add(teamName);
 		
-		// team name
-		invalidTxt= new JLabel("Not An Accetible Team Name");
+		// invalid Member
+		invalidTxt= new JLabel("Not A Valid Username");
 		invalidTxt.setBounds(700,360,700,50);
 		invalidTxt.setVisible(false);
 		panel.add(invalidTxt);
+		
+		// Wins title
+		winsTitle= new JLabel("Wins:");
+		winsTitle.setBounds(600,400,700,50);
+		winsTitle.setFont(new Font("Courier", Font.BOLD,40));
+		winsTitle.setVisible(true);
+		panel.add(winsTitle);
+				
+		// Lose title
+		losesTitle= new JLabel("Loses:");
+		losesTitle.setBounds(750,400,700,50);
+		losesTitle.setFont(new Font("Courier", Font.BOLD,40));
+		losesTitle.setVisible(true);
+		panel.add(losesTitle);
+		
+		// Display total wins
+		winsDis= new JLabel(String.valueOf(Team.getWins()));
+		winsDis.setBounds(600,450,700,50);
+		winsDis.setFont(new Font("Courier", Font.BOLD,40));
+		winsDis.setVisible(true);
+		panel.add(winsDis);
+		
+		// Display total loses
+		losesDis= new JLabel(String.valueOf(Team.getLoses()));
+		losesDis.setBounds(750,450,700,50);
+		losesDis.setFont(new Font("Courier", Font.BOLD,40));
+		losesDis.setVisible(true);
+		panel.add(losesDis);
 		
 		//team List
 		LinkedList<TeamUnit> pog = new LinkedList<TeamUnit>();
@@ -81,18 +113,12 @@ public class Team {
 		pane.setBounds(100,75,400,400);
 		panel.add(pane);
 		
-		// Join Button
-		lookAt = new JButton("Select");
-		lookAt.setBounds(400, 500, 75, 25);
-		lookAt.setVisible(true);
-		panel.add(lookAt);
-		
 		// create Button
-		create = new JButton("Create");
+		create = new JButton("Add Player");
 		create.setBounds(650, 300, 100, 25);
 		
 		//create text feild
-		teamNameTxt = new JTextField(25);
+		teamNameTxt = new JTextField("Enter New Teammate.",25);
 		teamNameTxt.setSize(250, 20);
 		teamNameTxt.setLocation(675, 245);
 		teamNameTxt.setVisible(false);
@@ -114,16 +140,26 @@ public class Team {
 		frame.setVisible(true);
 		
 		//action listeners
-		lookAt.addActionListener(new ActionListener() {
+		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
 				frame.dispose();
-				new Team(Username, selected);
+				new HomePage(Username);
 			}
 		});
+		
+		// Add player to a team
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				String newTeamMember = "";
+				newTeamMember = teamNameTxt.getText();
+				// check if it is a valid Username.
+				if(!newTeamMember.equals("Enter New Teammate.")) {
+					frame.dispose();
+					new Team(Username, Team);
+				}
+				else {
+					invalidTxt.setVisible(true);
+				}
 			}
 		});
 	}

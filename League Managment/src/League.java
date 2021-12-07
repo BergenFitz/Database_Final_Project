@@ -10,10 +10,12 @@ public class League {
 	private static JList<String> userTeamList;
 	private static JLabel title;
 	private static JLabel createTitle;
+	private static JLabel deleteTitle;
 	private static JLabel teamName;
 	private static JLabel invalidTxt;
 	private static JButton lookAt;
 	private static JButton create;
+	private static JButton delete;
 	private static JTextField teamNameTxt;
 	 
 	public League(String Username, LeagueUnit league) {
@@ -33,7 +35,7 @@ public class League {
 		
 		// Title 
 		title = new JLabel("Teams in " + league.getName());
-		title.setBounds(175,20,400,50);
+		title.setBounds(100,20,400,50);
 		title.setFont(new Font("Courier", Font.BOLD,40));
 		panel.add(title);
 		
@@ -43,6 +45,13 @@ public class League {
 		createTitle.setFont(new Font("Courier", Font.BOLD,20));
 		createTitle.setVisible(false);
 		panel.add(createTitle);
+		
+		// Delete Title 
+		deleteTitle = new JLabel("Delete League:");
+		deleteTitle.setBounds(650,175,400,50);
+		deleteTitle.setFont(new Font("Courier", Font.BOLD,20));
+		deleteTitle.setVisible(false);
+		panel.add(deleteTitle);
 		
 		// team name
 		teamName= new JLabel("Team Name:");
@@ -79,8 +88,12 @@ public class League {
 		create = new JButton("Create");
 		create.setBounds(650, 300, 100, 25);
 		
+		// delete Button
+		delete = new JButton("Delete");
+		delete.setBounds(700, 250, 100, 25);
+		
 		//create text feild
-		teamNameTxt = new JTextField(25);
+		teamNameTxt = new JTextField("Enter Team Name.",25);
 		teamNameTxt.setSize(250, 20);
 		teamNameTxt.setLocation(675, 245);
 		teamNameTxt.setVisible(false);
@@ -89,12 +102,19 @@ public class League {
 		create.setVisible(false);
 		panel.add(create);
 		
+		delete.setVisible(false);
+		panel.add(delete);
+		
 		//check if they are a member and that they are not already in a team in the league
-		if(Username != "Guest") {
+		if(Username != "Guest" && Username != "Admin") {
 			create.setVisible(true);
 			createTitle.setVisible(true);
 			teamName.setVisible(true);
 			teamNameTxt.setVisible(true);
+		}
+		else if(Username == "Admin") {
+			deleteTitle.setVisible(true);
+			delete.setVisible(true);
 		}
 		
 		// set frame to visible
@@ -104,26 +124,36 @@ public class League {
 		//action listeners
 		lookAt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
-				frame.dispose();
-				new Team(Username, selected);
+				if(userTeamList.getSelectedIndex() != -1) {
+					TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
+					frame.dispose();
+					new Team(Username, selected);
+				}
 			}
 		});
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String newTeamName = "";
 				newTeamName = teamNameTxt.getText();
-				if(ProfanityCheck(newTeamName) && newTeamName != "") {
-					invalidTxt.setVisible(false);
-					invalidTxt.setVisible(true);
-				}
-				else {
+				System.out.println(newTeamName);
+				if(!ProfanityCheck(newTeamName) && !newTeamName.equals("Enter Team Name.")) {
+					
 					//Add the team to the database
 					frame.dispose();
 					new HomePage(Username);
 				}
+				else {
+					invalidTxt.setVisible(false);
+					invalidTxt.setVisible(true);
+				}
 			}
 		});
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
 	}
 	
 	public static boolean ProfanityCheck(String toCheck) {
@@ -137,6 +167,6 @@ public class League {
 	}
 	public static void main(String[] args) {
 		
-		new League("TestUser",new LeagueUnit(123, "Rockets", "Softball"));
+		new League("Admin",new LeagueUnit(123, "Rockets", "Softball"));
 	}
 }
