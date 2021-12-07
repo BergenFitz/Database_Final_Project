@@ -1,7 +1,7 @@
 
 public class MyTeam {
 	
-	public MyTeam(String UserName) {
+	public MyTeam(String Username) {
 		
 	}
 	
