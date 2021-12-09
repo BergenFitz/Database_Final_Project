@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Login {
-	public Login() {
+	public Login(Database db) {
 		// Create the greeting screen.
 		JFrame frame = new JFrame("Welcome to MyLeague");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +63,7 @@ public class Login {
 		// Add an action listener that listens for when the guest login button is clicked.
 		guestLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new HomePage("Guest");
+				new HomePage("Guest", db);
 				frame.dispose();
 			}
 		});
@@ -318,7 +318,7 @@ public class Login {
 	}
 	// This main is used for running test on login functions and running whole project.
 	public static void main(String[] args) {
-		new Login();
+		//new Login();
 	}
 
 }

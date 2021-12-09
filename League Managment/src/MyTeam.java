@@ -14,7 +14,7 @@ public class MyTeam {
 	private static JLabel title;
 	private static JButton lookAt;
 	
-	public MyTeam(String Username) {
+	public MyTeam(String Username, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -68,25 +68,25 @@ public class MyTeam {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username);
+				new HomePage(Username, db);
 			}
 		});
 		menuUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new UserInfo(Username);
+				new UserInfo(Username, db);
 			}
 		});
 		menuMyLeague.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyLeague(Username);	
+				new MyLeague(Username, db);	
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username);
+				new AllLeagues(Username, db);
 			}
 		});
 		lookAt.addActionListener(new ActionListener() {
@@ -94,7 +94,7 @@ public class MyTeam {
 				if(userTeamList.getSelectedIndex() != -1) {
 					TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
 					frame.dispose();
-					new Team(Username, selected);
+					new Team(Username, selected,db);
 				}
 			}
 		});
@@ -102,7 +102,7 @@ public class MyTeam {
 	
 	// This function is used to test MyTeam class
 	public static void main(String[] args) {
-		new MyTeam("TestUser");
+		//new MyTeam("TestUser");
 	}
 
 }

@@ -12,7 +12,8 @@ public class MyLeague {
 	private static JList<String> userLeagueList;
 	 private static JLabel title;
 	 private static JButton lookAt;
-	public MyLeague(String Username) {
+	 
+	public MyLeague(String Username, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -66,25 +67,25 @@ public class MyLeague {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username);
+				new HomePage(Username,db);
 			}
 		});
 		menuUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new UserInfo(Username);
+				new UserInfo(Username,db);
 			}
 		});
 		menuMyTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyTeam(Username);	
+				new MyTeam(Username,db);	
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username);
+				new AllLeagues(Username,db);
 			}
 		});
 		// ActionListener for join button
@@ -93,13 +94,13 @@ public class MyLeague {
 				// look at the selected league
 				LeagueUnit selected = pog.get(userLeagueList.getSelectedIndex());
 				frame.dispose();
-				new League(Username, selected);
+				new League(Username, selected,db);
 			}
 		});
 	}
 	// Used to test the MyLeague Class
 	public static void main(String[] args) {
-		new MyLeague("TestUser");
+		//new MyLeague("TestUser");
 	}
 
 }

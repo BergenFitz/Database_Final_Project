@@ -18,7 +18,7 @@ public class League {
 	private static JButton delete;
 	private static JTextField teamNameTxt;
 	 
-	public League(String Username, LeagueUnit league) {
+	public League(String Username, LeagueUnit league, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -127,7 +127,7 @@ public class League {
 				if(userTeamList.getSelectedIndex() != -1) {
 					TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
 					frame.dispose();
-					new Team(Username, selected);
+					new Team(Username, selected, db);
 				}
 			}
 		});
@@ -140,7 +140,7 @@ public class League {
 					
 					//Add the team to the database
 					frame.dispose();
-					new HomePage(Username);
+					new HomePage(Username, db);
 				}
 				else {
 					invalidTxt.setVisible(false);
@@ -167,6 +167,6 @@ public class League {
 	}
 	public static void main(String[] args) {
 		
-		new League("Admin",new LeagueUnit(123, "Rockets", "Softball"));
+		//new League("Admin",new LeagueUnit(123, "Rockets", "Softball"));
 	}
 }

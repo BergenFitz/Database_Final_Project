@@ -15,7 +15,7 @@ public class UserInfo {
 	private static JLabel passwordTitle;
 	private static JButton delete;
 	
-	public UserInfo(String Username) {
+	public UserInfo(String Username, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -80,30 +80,30 @@ public class UserInfo {
 		menuLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username);
+				new HomePage(Username, db);
 			}
 		});
 		menuMyTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyTeam(Username);	
+				new MyTeam(Username, db);	
 			}
 		});
 		menuMyLeague.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyLeague(Username);
+				new MyLeague(Username, db);
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username);
+				new AllLeagues(Username, db);
 			}
 		});
 	}
 	public static void main(String[] args) {
-		new UserInfo("TestUser");
+		//new UserInfo("TestUser");
 
 	}
 

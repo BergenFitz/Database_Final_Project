@@ -32,7 +32,7 @@ public class Team {
 	private static JButton create;
 	private static JTextField teamNameTxt;
 	
-	public Team (String Username, TeamUnit Team) {
+	public Team (String Username, TeamUnit Team, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -143,7 +143,7 @@ public class Team {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username);
+				new HomePage(Username, db);
 			}
 		});
 		
@@ -155,7 +155,7 @@ public class Team {
 				// check if it is a valid Username.
 				if(!newTeamMember.equals("Enter New Teammate.")) {
 					frame.dispose();
-					new Team(Username, Team);
+					new Team(Username, Team, db);
 				}
 				else {
 					invalidTxt.setVisible(true);
@@ -165,7 +165,7 @@ public class Team {
 	}
 	// This function is used to test the team class
 	public static void main(String[] args) {
-		new Team("TestUser", new TeamUnit(1, 123, "Rockets", "TestUser", 7, 5));
+		//new Team("TestUser", new TeamUnit(1, 123, "Rockets", "TestUser", 7, 5));
 	}
 
 }

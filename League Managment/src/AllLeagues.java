@@ -18,7 +18,7 @@ public class AllLeagues {
 	private static JTextField leagueNameTxt;
 	private static JTextField leagueSportTxt;
 	
-	public AllLeagues(String Username) {
+	public AllLeagues(String Username, Database db) {
 			JFrame frame = new JFrame();
 			JPanel panel = new JPanel();
 			panel.setLayout(null);
@@ -122,7 +122,7 @@ public class AllLeagues {
 			menuBack.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
-					new HomePage(Username);
+					new HomePage(Username, db);
 				}
 			});
 			lookAt.addActionListener(new ActionListener() {
@@ -130,7 +130,7 @@ public class AllLeagues {
 					if(userTeamList.getSelectedIndex() != -1) {
 						TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
 						frame.dispose();
-						new Team(Username, selected);
+						new Team(Username, selected, db);
 					}
 				}
 			});
@@ -146,8 +146,8 @@ public class AllLeagues {
 		
 	}
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new AllLeagues("Admin");
+		//TODO Auto-generated method stub
+		//new AllLeagues("Admin");
 	}
 
 }

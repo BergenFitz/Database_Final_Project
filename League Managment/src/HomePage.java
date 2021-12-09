@@ -9,7 +9,7 @@ public class HomePage {
 	private static JMenuItem menuLeagues;
 	private static JMenuBar bar;
 	
-	public HomePage(String Username) {
+	public HomePage(String Username, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -42,38 +42,38 @@ public class HomePage {
 		menuLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new Login();
+				new Login(db);
 			}
 		});
 		menuUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new UserInfo(Username);
+				new UserInfo(Username,db);
 			}
 		});
 		menuMyTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyTeam(Username);	
+				new MyTeam(Username, db);	
 			}
 		});
 		menuMyLeague.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyLeague(Username);
+				new MyLeague(Username, db);
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username);
+				new AllLeagues(Username,db);
 			}
 		});
 	}
 	
 	// This method used to test homepage
 	public static void main(String[] args) {
-		new HomePage("TestUser");
+		//new HomePage("TestUser");
 	}
 
 }
