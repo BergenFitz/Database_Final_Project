@@ -17,7 +17,7 @@ public class TeamUnit {
 	}
 	
 	public String toString() {
-		return name;
+		return name + ": Wins - " + String.valueOf(wins) + " Loses - " + String.valueOf(loses);
 	}
 	public int getID() {
 		return id;

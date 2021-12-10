@@ -35,7 +35,7 @@ public class League {
 		
 		// Title 
 		title = new JLabel("Teams in " + league.getName());
-		title.setBounds(100,20,400,50);
+		title.setBounds(100,20,700,50);
 		title.setFont(new Font("Courier", Font.BOLD,40));
 		panel.add(title);
 		
@@ -106,13 +106,13 @@ public class League {
 		panel.add(delete);
 		
 		//check if they are a member and that they are not already in a team in the league
-		if(Username != "Guest" && Username != "Admin") {
+		if(Username != "Guest" && !Username.equals("Admin") && !db.userInLeauge(Username, league)) {
 			create.setVisible(true);
 			createTitle.setVisible(true);
 			teamName.setVisible(true);
 			teamNameTxt.setVisible(true);
 		}
-		else if(Username == "Admin") {
+		else if(Username.equals("Admin")) {
 			deleteTitle.setVisible(true);
 			delete.setVisible(true);
 		}
@@ -122,6 +122,12 @@ public class League {
 		frame.setVisible(true);
 		
 		//action listeners
+		menuBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new HomePage(Username, db);
+			}
+		});
 		lookAt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(userTeamList.getSelectedIndex() != -1) {
@@ -139,8 +145,14 @@ public class League {
 				if(!ProfanityCheck(newTeamName) && !newTeamName.equals("Enter Team Name.")) {
 					
 					//Add the team to the database
-					frame.dispose();
-					new HomePage(Username, db);
+					if(db.createNewTeam(league.getID(), newTeamName, Username)) {
+						frame.dispose();
+						new League(Username, league, db);
+					}
+					else {
+						invalidTxt.setVisible(false);
+						invalidTxt.setVisible(true);
+					}
 				}
 				else {
 					invalidTxt.setVisible(false);
@@ -165,6 +177,18 @@ public class League {
 		}
 		return false;
 	}
+	
+	private DefaultListModel<String> makeList(LinkedList<TeamUnit> rog, DefaultListModel<String> modell) {
+		for (int i = 0; i < rog.size(); i++) {
+			// We take an individual register item out of the list.
+			TeamUnit team = rog.get(i);
+			// We use that register item to get the program that it corresponds to.
+			String input = "<html>" + team.toString()+"</html>";
+			modell.add(i,input);
+		}
+		return modell;
+	}
+	
 	public static void main(String[] args) {
 		
 		//new League("Admin",new LeagueUnit(123, "Rockets", "Softball"));

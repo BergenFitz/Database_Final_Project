@@ -14,10 +14,10 @@ public class LeagueManagement {
 			e.printStackTrace();
 		}
 		
+		// After Connecting properly start up program with login 
+		new Login(db);
 		
-		
-		
-		
+		/**
 		try {
 			db.disconnect();
 			// Successful Disconnection 
@@ -26,6 +26,7 @@ public class LeagueManagement {
 			System.out.println("Couldn't Disconnect from Database....");
 			e.printStackTrace();
 		}
+		**/
 
 	}
 

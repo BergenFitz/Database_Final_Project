@@ -65,12 +65,12 @@ public class AllLeagues {
 			panel.add(invalidTxt);
 			
 			//team List
-			LinkedList<TeamUnit> pog = new LinkedList<TeamUnit>();
+			LinkedList<LeagueUnit> pog = db.getAllLeagues();
 			DefaultListModel<String> model = new DefaultListModel<String>();
 			userTeamList = new JList<String>(model);
 			//Set length of the of the list to the number of leagues user is in
 			model.setSize(pog.size());
-			
+			model = makeList(pog, model);
 			userTeamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			userTeamList.setBounds(100,75,400,400);
 			JScrollPane pane = new JScrollPane(userTeamList);
@@ -105,7 +105,7 @@ public class AllLeagues {
 			panel.add(create);
 			
 			//check if they are a member and that they are not already in a team in the league
-			if(Username == "Admin") {
+			if(Username.equals("Admin")) {
 				create.setVisible(true);
 				createTitle.setVisible(true);
 				teamName.setVisible(true);
@@ -128,23 +128,42 @@ public class AllLeagues {
 			lookAt.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(userTeamList.getSelectedIndex() != -1) {
-						TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
+						LeagueUnit selected = pog.get(userTeamList.getSelectedIndex());
 						frame.dispose();
-						new Team(Username, selected, db);
+						new League(Username, selected, db);
 					}
 				}
 			});
 			create.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String newTeamName = "";
-					newTeamName = leagueNameTxt.getText();
+					String newLeagueName = "";
+					String newLeagueSport = "";
+					newLeagueName = leagueNameTxt.getText();
+					newLeagueSport = leagueSportTxt.getText();
+					if(db.createNewLeague(newLeagueName, newLeagueSport)) {
+						frame.dispose();
+						new AllLeagues(Username, db);
+					}
+					else {
 						invalidTxt.setVisible(false);
 						invalidTxt.setVisible(true);
-
+					}
 				}
 			});
 		
 	}
+	
+	private DefaultListModel<String> makeList(LinkedList<LeagueUnit> rog, DefaultListModel<String> modell) {
+		for (int i = 0; i < rog.size(); i++) {
+			// We take an individual register item out of the list.
+			LeagueUnit League = rog.get(i);
+			// We use that register item to get the program that it corresponds to.
+			String input = "<html>" + League.getName() + ", " + League.getSport() +"</html>";
+			modell.add(i,input);
+		}
+		return modell;
+	}
+	
 	public static void main(String[] args) {
 		//TODO Auto-generated method stub
 		//new AllLeagues("Admin");

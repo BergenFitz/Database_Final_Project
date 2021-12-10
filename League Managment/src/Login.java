@@ -49,14 +49,14 @@ public class Login {
 		// Add an action listener that listens for when the member login button is clicked.
 		memberLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				memberLoginWindow(frame);
+				memberLoginWindow(frame, db);
 			}
 		});
 		
 		// Add an action listener that listens for when the create member login button is clicked.
 		createMem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				createNewMember(frame);
+				createNewMember(frame, db);
 			}
 		});
 		
@@ -69,7 +69,7 @@ public class Login {
 		});
 	}
 	
-	public void memberLoginWindow(JFrame frame) {
+	public void memberLoginWindow(JFrame frame, Database db) {
 		JFrame loginFrame = new JFrame("Member Login");
 		
 		// Create a JPanel object for logging in a staff member.
@@ -114,7 +114,7 @@ public class Login {
 		loginpane.add(check);
 		
 		// Password/Username incorrect
-		JLabel message = new JLabel("Name/Password Invalid");
+		JLabel message = new JLabel("Userame/Password Invalid");
 		message.setSize(300, 25);
 		message.setLocation(240, 300);
 		message.setVisible(false);
@@ -137,47 +137,19 @@ public class Login {
 				// Get the actual username and password in strings for comparison.
 				usernameTxt = username.getText();
 				passwordTxt = password.getText();
-				/*
-				// Evaluate username and password!
-				String eval = db.getStaffPassword(firstnameTxt, lastnameTxt);
-				if(eval == null || eval.equals(passwordTxt.hashCode() + "") == false) {
-					// The credentials provided are incorrect.
-					message.setVisible(true);
+
+				if(passwordTxt.equals(db.getUserPassword(usernameTxt))) {
+					new HomePage(usernameTxt, db);
+					loginFrame.dispose();
+					frame.dispose();
 				}
 				else {
-					// The credentials are correct, but is the user active?
-					String stat = db.getStaffStatus(firstnameTxt, lastnameTxt);
-					if (stat.equals("Inactive")) {
-						// The staff member is not active, so they should not be able to log in.
-						JFrame dis = new JFrame("ACCESS DENIED!");
-						JPanel disP = new JPanel();
-						
-						disP.setLayout(null);
-						dis.add(disP);
-						
-						JLabel no = new JLabel("Your account is inactive!");
-						no.setBounds(100, 50, 300, 30);
-						no.setVisible(true);
-						disP.add(no);
-						
-						dis.setSize(500, 300);
-						dis.setVisible(true);
-						
-					} else {
-						// The staff member is active.
-						// Send the staff member to the staffUI
-						new StaffUI(firstnameTxt, lastnameTxt, db);
-						loginFrame.dispose();
-						frame.dispose();
-					}
+					message.setVisible(true);
 				}
-				*/
-				loginFrame.dispose();
-				frame.dispose();
 			}
 		});
 	}
-	public void createNewMember(JFrame frame) {
+	public void createNewMember(JFrame frame, Database db) {
 		JFrame loginFrame = new JFrame("Create New Member");
 		
 		// Create a JPanel object for logging in a staff member.
@@ -186,7 +158,7 @@ public class Login {
 		loginpane.setLayout(null);
 		
 		// The title of the staff login screen
-		JLabel title = new JLabel("Please provide your full name, unique username and password.", JLabel.CENTER);
+		JLabel title = new JLabel("Please provide your full name, unique username, and password.", JLabel.CENTER);
 		title.setSize(300, 30);
 		title.setLocation(150, 100);
 		loginpane.add(title);
@@ -273,46 +245,17 @@ public class Login {
 				// Get the actual username and password in strings for comparison.
 				firstnameTxt = firstName.getText();
 				lastnameTxt = lastName.getText();
-				//usernameTxt = username.getText();
+				usernameTxt = username.getText();
 				passwordTxt = password.getText();
 				
-				/*
-				// Evaluate username and password!
-				String eval = db.getStaffPassword(firstnameTxt, lastnameTxt);
-				if(eval == null || eval.equals(passwordTxt.hashCode() + "") == false) {
-					// The credentials provided are incorrect.
-					message.setVisible(true);
+				if(db.createNewUser(usernameTxt, passwordTxt, firstnameTxt, lastnameTxt)) {
+					new HomePage(usernameTxt, db);
+					loginFrame.dispose();
+					frame.dispose();
 				}
 				else {
-					// The credentials are correct, but is the user active?
-					String stat = db.getStaffStatus(firstnameTxt, lastnameTxt);
-					if (stat.equals("Inactive")) {
-						// The staff member is not active, so they should not be able to log in.
-						JFrame dis = new JFrame("ACCESS DENIED!");
-						JPanel disP = new JPanel();
-						
-						disP.setLayout(null);
-						dis.add(disP);
-						
-						JLabel no = new JLabel("Your account is inactive!");
-						no.setBounds(100, 50, 300, 30);
-						no.setVisible(true);
-						disP.add(no);
-						
-						dis.setSize(500, 300);
-						dis.setVisible(true);
-						
-					} else {
-						// The staff member is active.
-						// Send the staff member to the staffUI
-						new StaffUI(firstnameTxt, lastnameTxt, db);
-						loginFrame.dispose();
-						frame.dispose();
-					}
+					message.setVisible(true);
 				}
-				*/
-				loginFrame.dispose();
-				frame.dispose();
 			}
 		});
 	}
