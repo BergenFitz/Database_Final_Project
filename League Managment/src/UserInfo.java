@@ -14,6 +14,13 @@ public class UserInfo {
 	private static JLabel nameTitle;
 	private static JLabel passwordTitle;
 	private static JButton delete;
+	private static JButton change;
+	private static JTextField NewPassTxt;
+	private static JTextField confirmNewPassTxt;
+	private static JLabel NewPass;
+	private static JLabel confirmNewPass;
+	private static JLabel passerror;
+	private static JLabel passMessage;
 	
 	public UserInfo(String Username, Database db) {
 		JFrame frame = new JFrame();
@@ -72,6 +79,59 @@ public class UserInfo {
 		delete.setVisible(true);
 		panel.add(delete);
 		
+		// delete Button
+		change = new JButton("Enter");
+		change.setBounds(700, 500, 75, 25);
+		change.setVisible(true);
+		panel.add(change);
+		
+		//create text feild
+		NewPassTxt = new JTextField(25);
+		NewPassTxt.setSize(250, 20);
+		NewPassTxt.setLocation(700, 400);
+		NewPassTxt.setVisible(true);
+		panel.add(NewPassTxt);
+		
+		//create text feild
+		confirmNewPassTxt = new JTextField(25);
+		confirmNewPassTxt.setSize(250, 20);
+		confirmNewPassTxt.setLocation(700, 450);
+		confirmNewPassTxt.setVisible(true);
+		panel.add(confirmNewPassTxt);
+		
+		// password Title 
+		NewPass = new JLabel("New Password:");
+		NewPass.setBounds(600,400,100,25);
+		NewPass.setFont(new Font("Courier", Font.BOLD,12));
+		NewPass.setVisible(true);
+		panel.add(NewPass);
+		
+		// password Title 
+		confirmNewPass = new JLabel("Confirm Password:");
+		confirmNewPass.setBounds(575,450,150,25);
+		confirmNewPass.setFont(new Font("Courier", Font.BOLD,12));
+		confirmNewPass.setVisible(true);
+		panel.add(confirmNewPass);
+		
+		passMessage = new JLabel("Change Password");
+		passMessage.setBounds(700, 350, 200, 25);
+		passMessage.setFont(new Font("Courier", Font.BOLD,20));
+		passMessage.setVisible(true);
+		panel.add(passMessage);
+		
+		passerror = new JLabel("New Password Doesn't Match!");
+		passerror.setBounds(675, 525, 200, 25);
+		passerror.setFont(new Font("Courier", Font.BOLD,12));
+		passerror.setVisible(false);
+		panel.add(passerror);
+		
+		// password Title 
+		passwordTitle = new JLabel("Password");
+		passwordTitle.setBounds(100,200,400,50);
+		passwordTitle.setFont(new Font("Courier", Font.BOLD,20));
+		passwordTitle.setVisible(true);
+		panel.add(passwordTitle);
+		
 		// set frame to visible
 		frame.setSize(1000,1000);
 		frame.setVisible(true);
@@ -101,9 +161,26 @@ public class UserInfo {
 				new AllLeagues(Username, db);
 			}
 		});
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				db.deleteUser(Username);
+				frame.dispose();
+				new Login(db);
+			}
+		});
+		change.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(NewPassTxt.getText().equals(e)) {
+					db.setNewPassword(Username, Username);
+				}
+				else {
+					passerror.setVisible(true);
+				}
+			}
+		});
 	}
 	public static void main(String[] args) {
-		//new UserInfo("TestUser");
+		new UserInfo("TestUser",Database.getInstance());
 
 	}
 

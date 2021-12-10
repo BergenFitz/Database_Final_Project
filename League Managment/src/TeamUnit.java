@@ -22,6 +22,9 @@ public class TeamUnit {
 	public int getID() {
 		return id;
 	}
+	public String getName() {
+		return name;
+	}
 	public int getLeagueID() {
 		return leagueID;
 	}

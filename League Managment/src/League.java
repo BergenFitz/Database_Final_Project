@@ -66,12 +66,12 @@ public class League {
 		panel.add(invalidTxt);
 		
 		//team List
-		LinkedList<TeamUnit> pog = new LinkedList<TeamUnit>();
+		LinkedList<TeamUnit> pog = db.getAllTeamsInLeague(league.getID());
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		userTeamList = new JList<String>(model);
 		//Set length of the of the list to the number of leagues user is in
 		model.setSize(pog.size());
-		
+		makeList(pog, model);
 		userTeamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userTeamList.setBounds(100,75,400,400);
 		JScrollPane pane = new JScrollPane(userTeamList);
@@ -146,6 +146,9 @@ public class League {
 					
 					//Add the team to the database
 					if(db.createNewTeam(league.getID(), newTeamName, Username)) {
+						// add the captain to the team and the league.
+						db.addPlayerToLeague(league.getID(), Username);
+						db.addPlayeToTeam(db.getTeamID(newTeamName), Username);
 						frame.dispose();
 						new League(Username, league, db);
 					}
@@ -162,7 +165,9 @@ public class League {
 		});
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				db.deleteLeague(league.getID());
+				frame.dispose();
+				new HomePage(Username,db);
 			}
 		});
 		

@@ -48,7 +48,7 @@ public class Team {
 		frame.setJMenuBar(bar);
 		
 		// Title 
-		title = new JLabel("Players On " + Team.toString());
+		title = new JLabel("Players On " + Team.getName());
 		title.setBounds(100,20,700,50);
 		title.setFont(new Font("Courier", Font.BOLD,40));
 		panel.add(title);
@@ -101,12 +101,12 @@ public class Team {
 		panel.add(losesDis);
 		
 		//team List
-		LinkedList<TeamUnit> pog = new LinkedList<TeamUnit>();
+		LinkedList<String> pog = db.getAllUserOnTeam(Team.getID());
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		userTeamList = new JList<String>(model);
 		//Set length of the of the list to the number of leagues user is in
 		model.setSize(pog.size());
-		
+		makeList(pog, model);
 		userTeamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userTeamList.setBounds(100,75,400,400);
 		JScrollPane pane = new JScrollPane(userTeamList);
@@ -153,7 +153,11 @@ public class Team {
 				String newTeamMember = "";
 				newTeamMember = teamNameTxt.getText();
 				// check if it is a valid Username.
-				if(!newTeamMember.equals("Enter New Teammate.")) {
+				if(!newTeamMember.equals("Enter New Teammate.") && db.userExist(newTeamMember)) {
+					//add new user to team.
+					db.addPlayeToTeam(Team.getID(), Username);
+					db.addPlayerToLeague(Team.getLeagueID(), Username);
+					
 					frame.dispose();
 					new Team(Username, Team, db);
 				}
@@ -163,6 +167,18 @@ public class Team {
 			}
 		});
 	}
+	
+	private DefaultListModel<String> makeList(LinkedList<String> rog, DefaultListModel<String> modell) {
+		for (int i = 0; i < rog.size(); i++) {
+			// We take an individual register item out of the list.
+			String User = rog.get(i);
+			// We use that register item to get the program that it corresponds to.
+			String input = "<html>" + User +"</html>";
+			modell.add(i,input);
+		}
+		return modell;
+	}
+	
 	// This function is used to test the team class
 	public static void main(String[] args) {
 		//new Team("TestUser", new TeamUnit(1, 123, "Rockets", "TestUser", 7, 5));
