@@ -30,6 +30,7 @@ public class Team {
 	private static JLabel teamName;
 	private static JLabel invalidTxt;
 	private static JButton create;
+	private static JButton removeUser;
 	private static JTextField teamNameTxt;
 	
 	public Team (UserUnit User, TeamUnit Team, Database db) {
@@ -121,8 +122,8 @@ public class Team {
 		create = new JButton("Add Player");
 		create.setBounds(650, 300, 100, 25);
 		
-		create = new JButton("Add Player");
-		create.setBounds(650, 300, 100, 25);
+		removeUser = new JButton("Remove From Team");
+		removeUser.setBounds(200, 500, 175, 25);
 		
 		//create text feild
 		teamNameTxt = new JTextField("Enter New Teammate.",25);
@@ -132,11 +133,14 @@ public class Team {
 		panel.add(teamNameTxt);
 
 		create.setVisible(false);
+		removeUser.setVisible(false);
 		panel.add(create);
+		panel.add(removeUser);
 		
 		//check if they are a member and that they are not already in a team in the league
 		if(User.getUsername().equals(Team.getCaptain())) {
 			create.setVisible(true);
+			removeUser.setVisible(true);
 			addTitle.setVisible(true);
 			teamName.setVisible(true);
 			teamNameTxt.setVisible(true);
@@ -159,6 +163,17 @@ public class Team {
 				db.deleteTeam(Team.getID());
 				frame.dispose();
 				new HomePage(User, db);
+			}
+		});
+		
+		//remove player from team.
+		removeUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String intake = pog.get(userTeamList.getSelectedIndex());
+				String[] subs = intake.split(" ");
+				db.removeUserFromTeam(subs[0], Team);
+				frame.dispose();
+				new Team(User,Team, db);
 			}
 		});
 		

@@ -174,6 +174,36 @@ public class Database {
 		}
 	}
 	
+	public void removeUserFromTeam(String username, TeamUnit team) {
+		// delete relationship of user and the team 
+		String insert = "DELETE FROM Athletes_Team WHERE Username = ? AND ID = ?";
+		try {
+			PreparedStatement stmt = connection.prepareStatement(insert);
+			stmt.setString(1, username);
+			stmt.setInt(2, team.getID());
+			stmt.executeUpdate();
+			// Add the Catain of the team to the New Team.
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// delete relationship between user and the league
+		insert = "DELETE FROM Athletes_League WHERE username = ? AND ID = ?";
+		try {
+			PreparedStatement stmt = connection.prepareStatement(insert);
+			stmt.setString(1, username);
+			stmt.setInt(2, team.getLeagueID());
+			stmt.executeUpdate();
+			// Add the Catain of the team to the New Team.
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void deleteUser(String username) {
 		String insert = "DELETE FROM Users WHERE Username = ?";
 		try {
