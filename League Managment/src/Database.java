@@ -159,6 +159,21 @@ public class Database {
 		}
 	}
 	
+	public void deleteTeam(int teamID) {
+		// delete the Team
+		String insert = "DELETE FROM Teams WHERE ID = ?";
+		try {
+			PreparedStatement stmt = connection.prepareStatement(insert);
+			stmt.setInt(1, teamID);
+			stmt.executeUpdate();
+			// Add the Catain of the team to the New Team.
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void deleteUser(String username) {
 		String insert = "DELETE FROM Users WHERE Username = ?";
 		try {

@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 public class Team {
 
 	private static JMenuItem menuBack;
+	private static JMenuItem menuTeamDelete;
 	private static JMenuBar bar;
 	private static JList<String> userTeamList;
 	private static JLabel title;
@@ -43,7 +44,11 @@ public class Team {
 		//Create the menu bar.
 		bar = new JMenuBar();
 		menuBack = new JMenuItem("<Back");
+		menuTeamDelete = new JMenuItem("Delete Team");
 		bar.add(menuBack);
+		if(User.getUsername().equals(Team.getCaptain())) {
+			bar.add(menuTeamDelete);
+		}
 		frame.setJMenuBar(bar);
 		
 		// Title 
@@ -116,6 +121,9 @@ public class Team {
 		create = new JButton("Add Player");
 		create.setBounds(650, 300, 100, 25);
 		
+		create = new JButton("Add Player");
+		create.setBounds(650, 300, 100, 25);
+		
 		//create text feild
 		teamNameTxt = new JTextField("Enter New Teammate.",25);
 		teamNameTxt.setSize(250, 20);
@@ -141,6 +149,14 @@ public class Team {
 		//action listeners
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new HomePage(User, db);
+			}
+		});
+		
+		menuTeamDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				db.deleteTeam(Team.getID());
 				frame.dispose();
 				new HomePage(User, db);
 			}
