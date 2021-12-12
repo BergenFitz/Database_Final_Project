@@ -142,7 +142,7 @@ public class League {
 				String newTeamName = "";
 				newTeamName = teamNameTxt.getText();
 				System.out.println(newTeamName);
-				if(!ProfanityCheck(newTeamName) && !newTeamName.equals("Enter Team Name.")) {
+				if(!ProfanityCheck(newTeamName) && !newTeamName.equals("Enter Team Name.") && !db.TeamNameTaken(newTeamName, league)) {
 					
 					//Add the team to the database
 					if(db.createNewTeam(league.getID(), newTeamName, User.getUsername())) {

@@ -370,5 +370,23 @@ public class Database {
 			return false;
 		}
  	}
+ 	
+ 	public boolean TeamNameTaken(String name, LeagueUnit league) {
+		String query = "SELECT * From Teams WHERE Name IN (?) AND LeagueID = ?;";
+		try {
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setString(1, name);
+			stmt.setInt(2, league.getID());
+			ResultSet results = stmt.executeQuery();
+			while(results.next()) {
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+ 	}
 	
 }
