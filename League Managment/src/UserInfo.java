@@ -22,13 +22,13 @@ public class UserInfo {
 	private static JLabel passerror;
 	private static JLabel passMessage;
 	
-	public UserInfo(String Username, Database db) {
+	public UserInfo(UserUnit User, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle(Username);
+		frame.setTitle(User.getFullName());
 		frame.add(panel);
 		
 		//Create the menu bar.
@@ -38,7 +38,7 @@ public class UserInfo {
 		menuMyLeague = new JMenuItem("My League");
 		menuLeagues = new JMenuItem("Leagues");
 		bar.add(menuLogout);
-		if(Username != "Guest") {
+		if(!User.getUsername().equals("Guest")) {
 			bar.add(menuMyTeam);
 			bar.add(menuMyLeague);
 		}
@@ -53,22 +53,34 @@ public class UserInfo {
 		panel.add(title);
 		
 		// username Title 
-		usernameTitle = new JLabel(Username);
+		usernameTitle = new JLabel(User.getUsername());
 		usernameTitle.setBounds(100,100,400,50);
 		usernameTitle.setFont(new Font("Courier", Font.BOLD,20));
 		usernameTitle.setVisible(true);
 		panel.add(usernameTitle);
 		
 		// name Title 
-		nameTitle = new JLabel("Name");
+		nameTitle = new JLabel("Name:");
 		nameTitle.setBounds(100,150,400,50);
 		nameTitle.setFont(new Font("Courier", Font.BOLD,20));
 		nameTitle.setVisible(true);
 		panel.add(nameTitle);
 		
+		nameTitle = new JLabel(User.getFullName());
+		nameTitle.setBounds(160,150,400,50);
+		nameTitle.setFont(new Font("Courier", Font.BOLD,20));
+		nameTitle.setVisible(true);
+		panel.add(nameTitle);
+		
 		// password Title 
-		passwordTitle = new JLabel("Password");
+		passwordTitle = new JLabel("Password:");
 		passwordTitle.setBounds(100,200,400,50);
+		passwordTitle.setFont(new Font("Courier", Font.BOLD,20));
+		passwordTitle.setVisible(true);
+		panel.add(passwordTitle);
+		
+		passwordTitle = new JLabel(User.getPassword());
+		passwordTitle.setBounds(210,200,400,50);
 		passwordTitle.setFont(new Font("Courier", Font.BOLD,20));
 		passwordTitle.setVisible(true);
 		panel.add(passwordTitle);
@@ -140,38 +152,40 @@ public class UserInfo {
 		menuLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username, db);
+				new HomePage(User, db);
 			}
 		});
 		menuMyTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyTeam(Username, db);	
+				new MyTeam(User, db);	
 			}
 		});
 		menuMyLeague.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyLeague(Username, db);
+				new MyLeague(User, db);
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username, db);
+				new AllLeagues(User, db);
 			}
 		});
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				db.deleteUser(Username);
+				db.deleteUser(User.getUsername());
 				frame.dispose();
 				new Login(db);
 			}
 		});
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(NewPassTxt.getText().equals(e)) {
-					db.setNewPassword(Username, Username);
+				if(NewPassTxt.getText().equals(confirmNewPassTxt.getText())) {
+					User.setNewPassword(NewPassTxt.getText());
+					db.setNewPassword(User.getUsername(), User.getPassword());
+					passwordTitle.setText(User.getPassword());
 				}
 				else {
 					passerror.setVisible(true);
@@ -180,7 +194,7 @@ public class UserInfo {
 		});
 	}
 	public static void main(String[] args) {
-		new UserInfo("TestUser",Database.getInstance());
+		//new UserInfo("TestUser",Database.getInstance());
 
 	}
 

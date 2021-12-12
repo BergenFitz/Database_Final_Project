@@ -63,7 +63,7 @@ public class Login {
 		// Add an action listener that listens for when the guest login button is clicked.
 		guestLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new HomePage("Guest", db);
+				new HomePage(new UserUnit ("Guest", null, null, null), db);
 				frame.dispose();
 			}
 		});
@@ -137,9 +137,9 @@ public class Login {
 				// Get the actual username and password in strings for comparison.
 				usernameTxt = username.getText();
 				passwordTxt = password.getText();
-
-				if(passwordTxt.equals(db.getUserPassword(usernameTxt))) {
-					new HomePage(usernameTxt, db);
+				UserUnit UserTesting = db.getUserPassword(usernameTxt);
+				if(passwordTxt.equals(UserTesting.getPassword())) {
+					new HomePage(UserTesting, db);
 					loginFrame.dispose();
 					frame.dispose();
 				}
@@ -249,7 +249,8 @@ public class Login {
 				passwordTxt = password.getText();
 				
 				if(db.createNewUser(usernameTxt, passwordTxt, firstnameTxt, lastnameTxt)) {
-					new HomePage(usernameTxt, db);
+					
+					new HomePage(new UserUnit(usernameTxt,passwordTxt,firstnameTxt,lastnameTxt), db);
 					loginFrame.dispose();
 					frame.dispose();
 				}

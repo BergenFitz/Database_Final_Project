@@ -13,19 +13,19 @@ public class MyLeague {
 	 private static JLabel title;
 	 private static JButton lookAt;
 	 
-	public MyLeague(String Username, Database db) {
+	public MyLeague(UserUnit User, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle(Username);
+		frame.setTitle(User.getFullName());
 		frame.add(panel);
 		
 		//Create the menu bar.
 		bar = new JMenuBar();
 		menuBack = new JMenuItem("<Back");
-		menuUser = new JMenuItem(Username);
+		menuUser = new JMenuItem(User.getFullName());
 		menuMyTeam = new JMenuItem("My Team");
 		menuLeagues = new JMenuItem("Leagues");
 		bar.add(menuBack);
@@ -41,12 +41,12 @@ public class MyLeague {
 		panel.add(title);
 		
 		//League List
-		LinkedList<LeagueUnit> pog = new LinkedList<LeagueUnit>();
+		LinkedList<LeagueUnit> pog = db.getMyLeagues(User.getUsername());
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		userLeagueList = new JList<String>(model);
 		//Set length of the of the list to the number of leagues user is in
 		model.setSize(pog.size());
-		
+		makeList(pog,model);
 		userLeagueList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userLeagueList.setBounds(100,75,400,400);
 		JScrollPane pane = new JScrollPane(userLeagueList);
@@ -67,25 +67,25 @@ public class MyLeague {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username,db);
+				new HomePage(User,db);
 			}
 		});
 		menuUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new UserInfo(Username,db);
+				new UserInfo(User,db);
 			}
 		});
 		menuMyTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyTeam(Username,db);	
+				new MyTeam(User,db);	
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username,db);
+				new AllLeagues(User,db);
 			}
 		});
 		// ActionListener for join button
@@ -94,9 +94,20 @@ public class MyLeague {
 				// look at the selected league
 				LeagueUnit selected = pog.get(userLeagueList.getSelectedIndex());
 				frame.dispose();
-				new League(Username, selected,db);
+				new League(User, selected,db);
 			}
 		});
+	}
+	
+	private DefaultListModel<String> makeList(LinkedList<LeagueUnit> rog, DefaultListModel<String> modell) {
+		for (int i = 0; i < rog.size(); i++) {
+			// We take an individual register item out of the list.
+			LeagueUnit League = rog.get(i);
+			// We use that register item to get the program that it corresponds to.
+			String input = "<html>" + League.getName() + ", " + League.getSport() +"</html>";
+			modell.add(i,input);
+		}
+		return modell;
 	}
 	// Used to test the MyLeague Class
 	public static void main(String[] args) {

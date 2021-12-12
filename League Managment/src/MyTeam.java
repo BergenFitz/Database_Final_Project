@@ -14,7 +14,7 @@ public class MyTeam {
 	private static JLabel title;
 	private static JButton lookAt;
 	
-	public MyTeam(String Username, Database db) {
+	public MyTeam(UserUnit User, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -26,7 +26,7 @@ public class MyTeam {
 		//Create the menu bar.
 		bar = new JMenuBar();
 		menuBack = new JMenuItem("<Back");
-		menuUser = new JMenuItem(Username);
+		menuUser = new JMenuItem(User.getFullName());
 		menuMyLeague = new JMenuItem("My League");
 		menuLeagues = new JMenuItem("Leagues");
 		bar.add(menuBack);
@@ -42,12 +42,12 @@ public class MyTeam {
 		panel.add(title);
 		
 		//team List
-		LinkedList<TeamUnit> pog = new LinkedList<TeamUnit>();
+		LinkedList<TeamUnit> pog = db.getMyTeams(User.getUsername());
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		userTeamList = new JList<String>(model);
 		//Set length of the of the list to the number of leagues user is in
 		model.setSize(pog.size());
-		
+		makeList(pog,model);
 		userTeamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userTeamList.setBounds(100,75,400,400);
 		JScrollPane pane = new JScrollPane(userTeamList);
@@ -68,25 +68,25 @@ public class MyTeam {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username, db);
+				new HomePage(User, db);
 			}
 		});
 		menuUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new UserInfo(Username, db);
+				new UserInfo(User, db);
 			}
 		});
 		menuMyLeague.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyLeague(Username, db);	
+				new MyLeague(User, db);	
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username, db);
+				new AllLeagues(User, db);
 			}
 		});
 		lookAt.addActionListener(new ActionListener() {
@@ -94,12 +94,22 @@ public class MyTeam {
 				if(userTeamList.getSelectedIndex() != -1) {
 					TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
 					frame.dispose();
-					new Team(Username, selected,db);
+					new Team(User, selected,db);
 				}
 			}
 		});
 	}
 	
+	private DefaultListModel<String> makeList(LinkedList<TeamUnit> rog, DefaultListModel<String> modell) {
+		for (int i = 0; i < rog.size(); i++) {
+			// We take an individual register item out of the list.
+			TeamUnit team = rog.get(i);
+			// We use that register item to get the program that it corresponds to.
+			String input = "<html>" + team.toString()+"</html>";
+			modell.add(i,input);
+		}
+		return modell;
+	}
 	// This function is used to test MyTeam class
 	public static void main(String[] args) {
 		//new MyTeam("TestUser");

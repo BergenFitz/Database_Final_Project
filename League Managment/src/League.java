@@ -18,7 +18,7 @@ public class League {
 	private static JButton delete;
 	private static JTextField teamNameTxt;
 	 
-	public League(String Username, LeagueUnit league, Database db) {
+	public League(UserUnit User, LeagueUnit league, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -106,13 +106,13 @@ public class League {
 		panel.add(delete);
 		
 		//check if they are a member and that they are not already in a team in the league
-		if(Username != "Guest" && !Username.equals("Admin") && !db.userInLeauge(Username, league)) {
+		if(!User.getUsername().equals("Guest") && !User.getUsername().equals("Admin") && !db.userInLeauge(User.getUsername(), league)) {
 			create.setVisible(true);
 			createTitle.setVisible(true);
 			teamName.setVisible(true);
 			teamNameTxt.setVisible(true);
 		}
-		else if(Username.equals("Admin")) {
+		else if(User.getUsername().equals("Admin")) {
 			deleteTitle.setVisible(true);
 			delete.setVisible(true);
 		}
@@ -125,7 +125,7 @@ public class League {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username, db);
+				new HomePage(User, db);
 			}
 		});
 		lookAt.addActionListener(new ActionListener() {
@@ -133,7 +133,7 @@ public class League {
 				if(userTeamList.getSelectedIndex() != -1) {
 					TeamUnit selected = pog.get(userTeamList.getSelectedIndex());
 					frame.dispose();
-					new Team(Username, selected, db);
+					new Team(User, selected, db);
 				}
 			}
 		});
@@ -145,12 +145,12 @@ public class League {
 				if(!ProfanityCheck(newTeamName) && !newTeamName.equals("Enter Team Name.")) {
 					
 					//Add the team to the database
-					if(db.createNewTeam(league.getID(), newTeamName, Username)) {
+					if(db.createNewTeam(league.getID(), newTeamName, User.getUsername())) {
 						// add the captain to the team and the league.
-						db.addPlayerToLeague(league.getID(), Username);
-						db.addPlayeToTeam(db.getTeamID(newTeamName), Username);
+						db.addPlayerToLeague(league.getID(), User.getUsername());
+						db.addPlayeToTeam(db.getTeamID(newTeamName), User.getUsername());
 						frame.dispose();
-						new League(Username, league, db);
+						new League(User, league, db);
 					}
 					else {
 						invalidTxt.setVisible(false);
@@ -167,7 +167,7 @@ public class League {
 			public void actionPerformed(ActionEvent e) {
 				db.deleteLeague(league.getID());
 				frame.dispose();
-				new HomePage(Username,db);
+				new HomePage(User,db);
 			}
 		});
 		

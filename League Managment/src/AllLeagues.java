@@ -18,7 +18,7 @@ public class AllLeagues {
 	private static JTextField leagueNameTxt;
 	private static JTextField leagueSportTxt;
 	
-	public AllLeagues(String Username, Database db) {
+	public AllLeagues(UserUnit User, Database db) {
 			JFrame frame = new JFrame();
 			JPanel panel = new JPanel();
 			panel.setLayout(null);
@@ -105,7 +105,7 @@ public class AllLeagues {
 			panel.add(create);
 			
 			//check if they are a member and that they are not already in a team in the league
-			if(Username.equals("Admin")) {
+			if(User.getUsername().equals("Admin")) {
 				create.setVisible(true);
 				createTitle.setVisible(true);
 				teamName.setVisible(true);
@@ -122,7 +122,7 @@ public class AllLeagues {
 			menuBack.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
-					new HomePage(Username, db);
+					new HomePage(User, db);
 				}
 			});
 			lookAt.addActionListener(new ActionListener() {
@@ -130,7 +130,7 @@ public class AllLeagues {
 					if(userTeamList.getSelectedIndex() != -1) {
 						LeagueUnit selected = pog.get(userTeamList.getSelectedIndex());
 						frame.dispose();
-						new League(Username, selected, db);
+						new League(User, selected, db);
 					}
 				}
 			});
@@ -142,7 +142,7 @@ public class AllLeagues {
 					newLeagueSport = leagueSportTxt.getText();
 					if(db.createNewLeague(newLeagueName, newLeagueSport)) {
 						frame.dispose();
-						new AllLeagues(Username, db);
+						new AllLeagues(User, db);
 					}
 					else {
 						invalidTxt.setVisible(false);

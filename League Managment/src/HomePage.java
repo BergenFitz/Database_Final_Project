@@ -9,25 +9,25 @@ public class HomePage {
 	private static JMenuItem menuLeagues;
 	private static JMenuBar bar;
 	
-	public HomePage(String Username, Database db) {
+	public HomePage(UserUnit User, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle(Username);
+		frame.setTitle(User.getFullName());
 		frame.add(panel);
 		
 		//Create the menu bar.
 		bar = new JMenuBar();
 		menuLogout = new JMenuItem("Logout");
-		menuUser = new JMenuItem(Username);
+		menuUser = new JMenuItem(User.getFullName());
 		menuMyTeam = new JMenuItem("My Team");
 		menuMyLeague = new JMenuItem("My League");
 		menuLeagues = new JMenuItem("Leagues");
 		bar.add(menuLogout);
 		bar.add(menuUser);
-		if(Username != "Guest") {
+		if(!User.getUsername().equals("Guest")) {
 			bar.add(menuMyTeam);
 			bar.add(menuMyLeague);
 		}
@@ -48,25 +48,25 @@ public class HomePage {
 		menuUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new UserInfo(Username,db);
+				new UserInfo(User,db);
 			}
 		});
 		menuMyTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyTeam(Username, db);	
+				new MyTeam(User, db);	
 			}
 		});
 		menuMyLeague.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new MyLeague(Username, db);
+				new MyLeague(User, db);
 			}
 		});
 		menuLeagues.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new AllLeagues(Username,db);
+				new AllLeagues(User,db);
 			}
 		});
 	}

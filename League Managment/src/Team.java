@@ -28,11 +28,10 @@ public class Team {
 	private static JLabel addTitle;
 	private static JLabel teamName;
 	private static JLabel invalidTxt;
-	private static JButton lookAt;
 	private static JButton create;
 	private static JTextField teamNameTxt;
 	
-	public Team (String Username, TeamUnit Team, Database db) {
+	public Team (UserUnit User, TeamUnit Team, Database db) {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -128,7 +127,7 @@ public class Team {
 		panel.add(create);
 		
 		//check if they are a member and that they are not already in a team in the league
-		if(Username == Team.getCaptain()) {
+		if(User.getUsername().equals(Team.getCaptain())) {
 			create.setVisible(true);
 			addTitle.setVisible(true);
 			teamName.setVisible(true);
@@ -143,7 +142,7 @@ public class Team {
 		menuBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				new HomePage(Username, db);
+				new HomePage(User, db);
 			}
 		});
 		
@@ -153,13 +152,16 @@ public class Team {
 				String newTeamMember = "";
 				newTeamMember = teamNameTxt.getText();
 				// check if it is a valid Username.
-				if(!newTeamMember.equals("Enter New Teammate.") && db.userExist(newTeamMember)) {
+				if(!newTeamMember.equals("Enter New Teammate.") && 
+						db.userExist(newTeamMember) && 
+						!db.userInLeauge(newTeamMember, 
+								new LeagueUnit(Team.getLeagueID(), null,null))) {
 					//add new user to team.
-					db.addPlayeToTeam(Team.getID(), Username);
-					db.addPlayerToLeague(Team.getLeagueID(), Username);
-					
+					db.addPlayeToTeam(Team.getID(), newTeamMember);
+					db.addPlayerToLeague(Team.getLeagueID(), newTeamMember);
 					frame.dispose();
-					new Team(Username, Team, db);
+					new Team(User,Team, db);
+					
 				}
 				else {
 					invalidTxt.setVisible(true);
@@ -170,10 +172,8 @@ public class Team {
 	
 	private DefaultListModel<String> makeList(LinkedList<String> rog, DefaultListModel<String> modell) {
 		for (int i = 0; i < rog.size(); i++) {
-			// We take an individual register item out of the list.
-			String User = rog.get(i);
 			// We use that register item to get the program that it corresponds to.
-			String input = "<html>" + User +"</html>";
+			String input = "<html>" + rog.get(i) +"</html>";
 			modell.add(i,input);
 		}
 		return modell;

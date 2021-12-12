@@ -42,22 +42,25 @@ public class Database {
 	 * Below is all the queries and delete and updates to the Database
 	 * @throws SQLException 
 	 */
-	public String getUserPassword (String Username) {
-		String query = "SELECT Password FROM Users WHERE Username = ?";
+	public UserUnit getUserPassword (String Username) {
+		String query = "SELECT Username, FirstName, LastName, Password FROM Users WHERE Username = ?";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(query);
 			stmt.setString(1, Username);
 			ResultSet results = stmt.executeQuery();
-			String resultPassword = "";
+			UserUnit resultUser = new UserUnit("X","","errorUser","errorUser");
 			while(results.next()) {
-				resultPassword = results.getString("Password");
+				resultUser = new UserUnit(results.getString("Username"), 
+						results.getString("Password"), 
+						results.getString("FirstName"), 
+						results.getString("LastName"));
 			}
-			return resultPassword;
+			return resultUser;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "Invalid Username has been Detected";
+			return null;
 		}
 	}
 	
@@ -75,7 +78,7 @@ public class Database {
 	}
 	
 	public boolean userInLeauge(String Username, LeagueUnit League) {
-		String query = "SELECT Username FROM Athletes_League WHERE Username = ? & ID = ?";
+		String query = "SELECT Username FROM Athletes_League WHERE Username = ? AND ID = ?";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(query);
@@ -290,10 +293,50 @@ public class Database {
 		}
 		return resultList;
 	}
+	
+	public LinkedList<LeagueUnit> getMyLeagues(String Username){
+		LinkedList<LeagueUnit> resultList = new LinkedList<LeagueUnit>();
+		String query = "SELECT Athletes_League.Username AS Username, LID, LName, SName FROM Athletes_League JOIN (SELECT Leagues.ID AS LID, Leagues.Name AS LName, Sport.Name AS SName FROM Leagues JOIN Sport ON Leagues.SportType = Sport.ID)AS SUB ON Athletes_League.ID = SUB.LID WHERE Athletes_League.Username = ?";
+		PreparedStatement stmt;
+		try {
+			stmt = connection.prepareStatement(query);
+			stmt.setString(1, Username);
+			ResultSet results = stmt.executeQuery();
+			while(results.next()) {
+				// Add new League to the list.
+				resultList.add(new LeagueUnit(results.getInt("LID"), results.getString("LName"), results.getString("SName")));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultList;
+	}
+	
+	public LinkedList<TeamUnit> getMyTeams(String Username){
+		LinkedList<TeamUnit> resultList = new LinkedList<TeamUnit>();
+		String query = "SELECT Teams.ID AS TID, Teams.Name AS TName, Teams.LeagueID AS LID, Teams.Captain AS Captain, Teams.Wins AS W, Teams.Loses AS L From Athletes_Team JOIN Teams ON Athletes_Team.ID = Teams.ID WHERE Athletes_Team.Username = ? ORDER BY Teams.Name";
+		PreparedStatement stmt;
+		try {
+			stmt = connection.prepareStatement(query);
+			stmt.setString(1, Username);
+			ResultSet results = stmt.executeQuery();
+			while(results.next()) {
+				// Add new League to the list.
+				resultList.add(new TeamUnit(results.getInt("TID"), results.getInt("LID"), results.getString("TName"), results.getString("Captain"), results.getInt("W"), results.getInt("L")));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultList;
+	}
 
 	public LinkedList<String> getAllUserOnTeam(int teamID){
 		LinkedList<String> resultList = new LinkedList<String>();
-		String query = "SELECT Users.FirstName AS FirstName, Users.LastName AS LastName FROM Users JOIN Athletes_Team ON Users.Username = Athletes_Team.Username Where Athletes_Team.ID = ? ORDER BY LastName";
+		String query = "SELECT Users.Username AS Username, Users.Password AS Password,Users.FirstName AS FirstName, Users.LastName AS LastName FROM Users JOIN Athletes_Team ON Users.Username = Athletes_Team.Username Where Athletes_Team.ID = ? ORDER BY LastName";
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(query);
@@ -301,7 +344,7 @@ public class Database {
 			ResultSet results = stmt.executeQuery();
 			while(results.next()) {
 				// Add new League to the list.
-				resultList.add(results.getString("FirstName") + " " + results.getString("LastName"));
+				resultList.add(results.getString("Username") + " ----- " +results.getString("FirstName") + " " +results.getString("LastName"));
 			}
 			
 		} catch (SQLException e) {
